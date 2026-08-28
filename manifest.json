@@ -7,7 +7,7 @@
   "theme_color":"#ffffff",
   "orientation":"portrait",
   "icons":[
-    {"src":"assets/left-logo.jpg","sizes":"128x128","type":"image/jpeg"},
-    {"src":"assets/left-logo.jpg","sizes":"256x256","type":"image/jpeg"}
+    {"src":"left-logo.jpg","sizes":"128x128","type":"image/jpeg"},
+    {"src":"left-logo.jpg","sizes":"256x256","type":"image/jpeg"}
   ]
 }
