@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="ur" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#ffffff">
+<link rel="manifest" href="manifest.json">
+<title>Homework Generator</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#f2f2f2;color:#111;font-family:Arial,sans-serif}
+.app{max-width:720px;margin:auto;padding:14px}
+h1{font-size:22px;margin:0 0 5px;text-align:center}
+.sub{font-size:13px;text-align:center;color:#666;margin-bottom:15px}
+.card{background:#fff;border:1px solid #ddd;border-radius:12px;padding:14px;margin-bottom:12px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+label{display:block;font-weight:700;font-size:14px;margin-bottom:5px}
+input,textarea,select{width:100%;font-size:17px;border:1px solid #bbb;border-radius:8px;padding:9px;background:#fff}
+textarea{min-height:68px;resize:vertical;font-family:"Noto Nastaliq Urdu","Jameel Noori Nastaleeq",serif;direction:rtl;text-align:right;line-height:1.8}
+.subject{border-top:2px solid #ddd;padding-top:12px;margin-top:12px}
+.subject h3{margin:0 0 9px;font-size:18px}
+.pages{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.btns{display:grid;grid-template-columns:1fr 1fr;gap:9px;position:sticky;bottom:8px}
+button{border:0;border-radius:10px;padding:13px;font-size:16px;font-weight:700;cursor:pointer}
+.primary{background:#111;color:#fff}.secondary{background:#e8e8e8;color:#111}
+.note{font-size:12px;color:#666;line-height:1.5}
+.preview-wrap{overflow:auto;background:#ddd;padding:10px;border-radius:10px}
+.a4{width:794px;min-height:1123px;background:white;margin:auto;padding:28px 28px 24px;direction:rtl;box-shadow:0 1px 8px #aaa}
+.copy{height:535px;border:2px solid #111;margin-bottom:23px;position:relative;overflow:hidden}
+.copy:last-child{margin-bottom:0}
+.copy-header{height:112px;border-bottom:2px solid #111;position:relative;padding:8px 92px;text-align:center}
+.copy-header .school{font-family:"Noto Nastaliq Urdu","Jameel Noori Nastaleeq",serif;font-size:29px;font-weight:900;line-height:1.25;white-space:nowrap}
+.copy-header .location{font-family:"Noto Nastaliq Urdu","Jameel Noori Nastaleeq",serif;font-size:15px;font-weight:700}
+.copy-header .hw{display:inline-block;border:2px solid #111;border-radius:25px;padding:1px 18px;font-family:"Noto Nastaliq Urdu","Jameel Noori Nastaleeq",serif;font-size:20px;font-weight:900;margin-top:2px}
+.copy-header .class{position:absolute;right:14px;bottom:12px;font-family:"Noto Nastaliq Urdu","Jameel Noori Nastaleeq",serif;font-size:15px}
+.copy-header .date{position:absolute;left:15px;bottom:12px;font-family:"Noto Nastaliq Urdu","Jameel Noori Nastaleeq",serif;font-size:15px}
+.logo{position:absolute;top:7px;width:75px;height:75px;object-fit:contain}
+.logo.left{left:9px}.logo.right{right:9px}
+.hwNo{font-family:inherit}
+.hw-table{width:calc(100% - 30px);margin:10px 15px 0;border-collapse:collapse;table-layout:fixed;direction:rtl;font-family:"Noto Nastaliq Urdu","Jameel Noori Nastaleeq",serif}
+.hw-table th,.hw-table td{border:1.5px solid #111;padding:3px 7px;vertical-align:middle}
+.hw-table th{font-size:17px;height:34px}
+.hw-table td{font-size:14px;line-height:1.55}
+.hw-table .subject-col{width:17%}.hw-table .q-col{width:63%}.hw-table .page-col{width:20%}
+.qrow{min-height:65px}.qcell{text-align:right}.pagecell{text-align:center;font-family:Arial,sans-serif;direction:ltr;font-size:15px}
+.note-p{position:absolute;bottom:5px;right:13px;left:13px;text-align:center;font-family:"Noto Nastaliq Urdu","Jameel Noori Nastaleeq",serif;font-size:12px;white-space:nowrap}
+.small-preview{font-size:12px;color:#666;text-align:center;margin-top:7px}
+@media(max-width:600px){.grid{grid-template-columns:1fr}.btns{grid-template-columns:1fr}.a4{transform-origin:top left;transform:scale(.42);width:794px;margin-bottom:-630px}.preview-wrap{height:500px}.copy-header .school{font-size:27px}}
+@media print{
+ body{background:#fff}.app{display:none}.preview-wrap{padding:0;overflow:visible}.a4{box-shadow:none;padding:28px 28px 24px;margin:0;width:794px;height:1123px;transform:none}.print-only{display:block}
+ @page{size:A4 portrait;margin:0}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="card">
+    <h1>📄 Urdu Homework Generator</h1>
+    <div class="sub">ایک A4 صفحہ = 2 ہوم ورک کاپیاں</div>
+    <div class="grid">
+      <div><label>ہوم ورک نمبر</label><input id="hwNo" value="11" inputmode="numeric"></div>
+      <div><label>تاریخ</label><input id="date" placeholder="مثلاً 29/08/2026"></div>
+      <div><div><label>جماعت</label><input id="className" value="IV"></div></div>
+      <div><div><label>مقام / سطر</label><input id="location" value="ہفتہ واری ہوم ورک"></div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div id="subjects"></div>
+  </div>
+
+  <div class="card">
+    <div class="btns">
+      <button class="secondary" onclick="loadPrevious()">↩ پچھلا ہوم ورک</button>
+      <button class="primary" onclick="saveAndPrint()">🖨 PDF / PRINT</button>
+    </div>
+    <p class="note">Print window میں Paper Size = A4 اور Scale = 100% رکھیں۔ اگر Save as PDF آئے تو PDF محفوظ کریں، پھر Xerox کیجئے۔</p>
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0">👁 A4 Preview</h3>
+    <div class="preview-wrap"><div id="a4" class="a4"></div></div>
+    <div class="small-preview">Preview کو دیکھ کر سوالات کی لمبائی چیک کریں۔</div>
+  </div>
+</div>
+
+<script>
+const DEFAULTS = [
+ {name:"ریاضی", p1:"65", p2:"68", q1:"جان نے زعماقانی ملاقات کے درمیان دو ہی دو دوائیاں کا بنا ہوا نظری نقشہ بنائیے۔", q2:"ضرب کیجئے۔"},
+ {name:"ہمارے آس پاس کی دنیا 1", p1:"50", p2:"58", q1:"خالی جگہوں میں مناسب لفظ لکھئے؟", q2:"تصویروں کا مشاہدہ کیجئے اور دیئے ہوئے جدول میں موسموں کے نام درج کرنے والے پھولوں کا اندراج کیجئے؟"},
+ {name:"ہمارے آس پاس کی دنیا 2", p1:"24", p2:"28", q1:"چچا جان کی کس بات کا یقین ہوگیا؟", q2:"شیواجی مہاراج نے توڑا قلعة نگرانی کے لئے کس کو افسر مقرر کیا؟"}
+];
+const $ = id => document.getElementById(id);
+
+function subjectCard(s,i){
+ return `<div class="subject">
+   <h3>مضمون ${i+1}</h3>
+   <label>مضمون کا نام</label><input data-k="name" data-i="${i}" value="${esc(s.name)}">
+   <div class="pages">
+     <div><label>صفحہ نمبر 1</label><input data-k="p1" data-i="${i}" value="${esc(s.p1)}"></div>
+     <div><label>صفحہ نمبر 2</label><input data-k="p2" data-i="${i}" value="${esc(s.p2)}"></div>
+   </div>
+   <label>سوال 1</label><textarea data-k="q1" data-i="${i}">${esc(s.q1)}</textarea>
+   <label>سوال 2</label><textarea data-k="q2" data-i="${i}">${esc(s.q2)}</textarea>
+ </div>`;
+}
+function esc(v){return String(v??"").replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;")}
+function getData(){
+ const subjects = DEFAULTS.map((_,i)=>({
+   name:document.querySelector(`[data-k=name][data-i="${i}"]`).value,
+   p1:document.querySelector(`[data-k=p1][data-i="${i}"]`).value,
+   p2:document.querySelector(`[data-k=p2][data-i="${i}"]`).value,
+   q1:document.querySelector(`[data-k=q1][data-i="${i}"]`).value,
+   q2:document.querySelector(`[data-k=q2][data-i="${i}"]`).value
+ }));
+ return {hwNo:$("hwNo").value,date:$("date").value,className:$("className").value,location:$("location").value,subjects};
+}
+function copyHTML(d){
+ const rows=d.subjects.map(s=>`<tr class="qrow">
+   <td class="subject-col">${s.name}</td>
+   <td class="q-col qcell">1&nbsp; ${s.q1}<br>2&nbsp; ${s.q2}</td>
+   <td class="page-col pagecell">${s.p1}<br>${s.p2}</td>
+ </tr>`).join("");
+ return `<div class="copy">
+   <div class="copy-header">
+     <img class="logo left" src="assets/left-logo.jpg">
+     <img class="logo right" src="assets/right-logo.jpg">
+     <div class="school">مؤید المسلمین پرائمری اسکول، کھجی بازار پر بھنی</div>
+     <div class="location">${d.location}</div>
+     <div class="hw">ہوم ورک نمبر <span class="hwNo">${d.hwNo}</span></div>
+     <div class="class">جماعت: ${d.className}</div>
+     <div class="date">تاریخ: ${d.date || "__________"}</div>
+   </div>
+   <table class="hw-table">
+    <thead><tr><th class="page-col">صفحہ نمبر</th><th class="q-col">سوالات</th><th class="subject-col">مضمون</th></tr></thead>
+    <tbody>${rows}</tbody>
+   </table>
+   <div class="note-p">نوٹ: سرپرست حضرات گھر میں ہی اپنی نگرانی میں یہ کام صاف اور خوشخط ہوم ورک کرائیں۔</div>
+ </div>`;
+}
+function render(){
+ const d=getData();
+ $("a4").innerHTML=copyHTML(d)+copyHTML(d);
+ localStorage.setItem("homeworkData",JSON.stringify(d));
+}
+function init(){
+ $("subjects").innerHTML=DEFAULTS.map(subjectCard).join("");
+ $("date").value = new Date().toLocaleDateString("en-GB");
+ document.querySelectorAll("input,textarea").forEach(el=>el.addEventListener("input",render));
+ const old=localStorage.getItem("homeworkData");
+ if(old){try{
+   const d=JSON.parse(old); $("hwNo").value=d.hwNo||"11"; $("date").value=d.date||$("date").value;
+   $("className").value=d.className||"IV"; $("location").value=d.location||"ہفتہ واری ہوم ورک";
+   d.subjects.forEach((s,i)=>Object.entries(s).forEach(([k,v])=>{const el=document.querySelector(`[data-k=${k}][data-i="${i}"]`);if(el)el.value=v;}));
+ }catch(e){}}
+ render();
+}
+function saveAndPrint(){render();setTimeout(()=>window.print(),150)}
+function loadPrevious(){
+ const old=localStorage.getItem("homeworkData");
+ if(!old){alert("ابھی پچھلا ہوم ورک محفوظ نہیں ہے۔");return}
+ try{
+  const d=JSON.parse(old); d.hwNo=String(Number(d.hwNo||0)+1);
+  $("hwNo").value=d.hwNo; $("date").value=new Date().toLocaleDateString("en-GB");
+  d.subjects.forEach((s,i)=>Object.entries(s).forEach(([k,v])=>{const el=document.querySelector(`[data-k=${k}][data-i="${i}"]`);if(el)el.value=v;}));
+  render();
+ }catch(e){alert("پچھلا ہوم ورک لوڈ نہیں ہوسکا۔")}
+}
+if("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
+init();
+</script>
+</body>
+</html>
